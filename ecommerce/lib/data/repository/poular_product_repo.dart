@@ -6,6 +6,7 @@ class PoularProductRepo extends GetxService{
   final ApiClient apiClient;
   PoularProductRepo({required this.apiClient});
   Future<Response> getPopularProductList()async{
+    print(apiClient.getData(AppConstants.POPULAR_PRODUCT_URL));
      return await apiClient.getData(AppConstants.POPULAR_PRODUCT_URL);
       }
 }

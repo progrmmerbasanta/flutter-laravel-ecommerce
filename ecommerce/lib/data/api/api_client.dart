@@ -10,11 +10,12 @@ class ApiClient extends GetConnect implements GetxService{
     token =AppConstants.TOKEN;
     _mainHeaders ={
         'Content-type':'application/json; charset = UTF-8',
-        'Authorization': 'Bearer $token',
+       'Authorization': 'Bearer $token',
     };
   }
   Future<Response> getData(String uri,)async{
    try{
+    print(uri);
     Response response = await get(uri);
     return response;
    }catch(e){
