@@ -1,3 +1,6 @@
+import 'package:ecommerce/controllers/recommended_product_controller.dart';
+import 'package:ecommerce/routes/route_helper.dart';
+import 'package:ecommerce/utils/app_constants.dart';
 import 'package:ecommerce/utils/dimensions.dart';
 import 'package:ecommerce/widgets/big_text.dart';
 import 'package:ecommerce/widgets/exandable_text_widget.dart';
@@ -5,32 +8,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
 import '../../colors.dart';
 import '../../widgets/app_icon.dart';
+import 'package:get/get.dart';
 
 class RecommendedFoodDetail extends StatelessWidget {
-  const RecommendedFoodDetail({Key? key}) : super(key: key);
-
+final  int pageId;
+ const  RecommendedFoodDetail({Key? key,required this.pageId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+ var  product = Get.find<RecommendedProductController>().recommendedProductList[pageId];
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             toolbarHeight:70,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(icon:Icons.clear),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(RouteHelper.getInitial());
+                  },
+                  child:  AppIcon(icon:Icons.clear),
+                ),
                 AppIcon(icon:Icons.shopping_cart_outlined)
               ],
             ),
             bottom: PreferredSize(
               preferredSize:Size.fromHeight(20),
               child:Container(
-              child: Center(child: BigText(size:Dimensions.font20,text:"Neplease Burger")),
+              child: Center(child: BigText(size:Dimensions.font20,text:product.name!)),
                 width: double.maxFinite,
                 padding: EdgeInsets.only(top: 5,bottom: 10),
                 decoration: BoxDecoration(
@@ -46,7 +56,8 @@ class RecommendedFoodDetail extends StatelessWidget {
             backgroundColor: AppColors.yellowColor,
             expandedHeight: 300,
         flexibleSpace: FlexibleSpaceBar(
-          background: Image.asset("assets/image/food1.png",
+          background: Image.network(
+            AppConstants.BASE_URL+AppConstants.UPLOAD_URL+product.img!,
           width: double.maxFinite,
           fit: BoxFit.cover,
           ),
@@ -56,7 +67,7 @@ class RecommendedFoodDetail extends StatelessWidget {
      child: Column(
      children: [
      Container(
- child: ExpandableTextWidget(text: "The Nepali burger typically consists of a grilled or fried chicken or vegetable patty, served on a sesame seed bun with spicy chutney, sliced onions, tomatoes, and lettuce. The chutney used in Nepali burgers is usually made from tomatoes, chili peppers, and a variety of spices, giving it a distinct, spicy flavor.Burgers at Burger Shack are as good as they come. These American-style burgers are something everyone should try. They are meaty and juicy and come with their secret sauce that will make you crave more. The size of some burgers at one of the best burger places in Kathmandu is quite small, but the taste is simply awesome.The Nepali burger typically consists of a grilled or fried chicken or vegetable patty, served on a sesame seed bun with spicy chutney, sliced onions, tomatoes, and lettuce. The chutney used in Nepali burgers is usually made from tomatoes, chili peppers, and a variety of spices, giving it a distinct, spicy flavor.Burgers at Burger Shack are as good as they come. These American-style burgers are something everyone should try. They are meaty and juicy and come with their secret sauce that will make you crave more. The size of some burgers at one of the best burger places in Kathmandu is quite small, but the taste is simply awesome.The Nepali burger typically consists of a grilled or fried chicken or vegetable patty, served on a sesame seed bun with spicy chutney, sliced onions, tomatoes, and lettuce. The chutney used in Nepali burgers is usually made from tomatoes, chili peppers, and a variety of spices, giving it a distinct, spicy flavor.Burgers at Burger Shack are as good as they come. These American-style burgers are something everyone should try. They are meaty and juicy and come with their secret sauce that will make you crave more. The size of some burgers at one of the best burger places in Kathmandu is quite small, but the taste is simply awesome.The Nepali burger typically consists of a grilled or fried chicken or vegetable patty, served on a sesame seed bun with spicy chutney, sliced onions, tomatoes, and lettuce. The chutney used in Nepali burgers is usually made from tomatoes, chili peppers, and a variety of spices, giving it a distinct, spicy flavor.Burgers at Burger Shack are as good as they come. These American-style burgers are something everyone should try. They are meaty and juicy and come with their secret sauce that will make you crave more. The size of some burgers at one of the best burger places in Kathmandu is quite small, but the taste is simply awesome."),
+ child: ExpandableTextWidget(text: product.description!),
     margin: EdgeInsets.only(left: Dimensions.width15,right: Dimensions.width20),
 
               )
@@ -83,7 +94,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                 iconColor:Colors.white,
               backgroundColor:AppColors.mainColor,
                icon: Icons.remove),
-               BigText(text: "\Rs300.30 "+" X "+" 0 ", color: AppColors.mainBlackColor,size: Dimensions.font26,),
+               BigText(text: "\RS ${product.price!} X  0", color: AppColors.mainBlackColor,size: Dimensions.font26,),
                 AppIcon(
                 iconSize: Dimensions.iconSize24,
                 iconColor:Colors.white,

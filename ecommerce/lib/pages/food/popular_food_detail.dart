@@ -1,3 +1,6 @@
+import 'package:ecommerce/controllers/popular_product_controller.dart';
+import 'package:ecommerce/pages/home/main_food_page.dart';
+import 'package:ecommerce/utils/app_constants.dart';
 import 'package:ecommerce/utils/dimensions.dart';
 import 'package:ecommerce/widgets/app_column.dart';
 import 'package:ecommerce/widgets/exandable_text_widget.dart';
@@ -5,6 +8,7 @@ import 'package:flutter/material.dart';
 //import 'dart:html';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import '../../colors.dart';
 import '../../widgets/app_icon.dart';
 import '../../widgets/big_text.dart';
@@ -12,10 +16,14 @@ import '../../widgets/icon_and_text_widget.dart';
 import '../../widgets/small_text.dart';
 
 class PopularFoodDetail extends StatelessWidget {
-  const PopularFoodDetail({Key? key}) : super(key: key);
+final  int pageId;
+ const PopularFoodDetail({Key? key,required this.pageId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var product = Get.find <PopularProductController>().popularProductList[pageId];
+   // print("page is id "+pageId.toString());
+   // print("product name is "+product.name.toString());
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -30,9 +38,10 @@ class PopularFoodDetail extends StatelessWidget {
               decoration: BoxDecoration(
                 image:DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage(
-                    "assets/image/food1.png"
-                  ))
+                  image: NetworkImage(
+                  AppConstants.BASE_URL+AppConstants.UPLOAD_URL+product.img!
+                  )
+                  )
               )
              
           ) ),
@@ -44,7 +53,11 @@ class PopularFoodDetail extends StatelessWidget {
             child:Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(icon:Icons.arrow_back_ios),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(()=>MainFoodPaage());
+                  },
+                  child: AppIcon(icon:Icons.arrow_back_ios)),
                 AppIcon(icon:Icons.shopping_cart_outlined)
 
               ],
@@ -67,12 +80,11 @@ class PopularFoodDetail extends StatelessWidget {
               child:Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-         AppColumn(text:"Neplease Burger"),
+         AppColumn(text:product.name!),
       SizedBox(height: Dimensions.height20,),
      BigText(text:"Introduce"),
      SizedBox(height: Dimensions.height20,),
-   Expanded(child: SingleChildScrollView(child: ExpandableTextWidget(text: "The Nepali burger typically consists of a grilled or fried chicken or vegetable patty, served on a sesame seed bun with spicy chutney, sliced onions, tomatoes, and lettuce. The chutney used in Nepali burgers is usually made from tomatoes, chili peppers, and a variety of spices, giving it a distinct, spicy flavor.Burgers at Burger Shack are as good as they come. These American-style burgers are something everyone should try. They are meaty and juicy and come with their secret sauce that will make you crave more. The size of some burgers at one of the best burger places in Kathmandu is quite small, but the taste is simply awesome."))),
-                                                   
+   Expanded(child: SingleChildScrollView(child: ExpandableTextWidget(text:product.description!))),                         
               ],
               ),
           )), 
@@ -109,7 +121,7 @@ class PopularFoodDetail extends StatelessWidget {
             ),
             Container(
                  padding: EdgeInsets.only(top: Dimensions.height20,bottom:Dimensions.height20,left: Dimensions.width20,right:Dimensions.width20),
-              child: BigText(text:"\RS100 | Add to cart",color: Colors.white,),
+              child: BigText(text:"\RS ${product.price!} | Add to cart",color: Colors.white,),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Dimensions.radius20),
                 color: AppColors.mainColor
