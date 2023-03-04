@@ -22,8 +22,7 @@ final  int pageId;
   @override
   Widget build(BuildContext context) {
     var product = Get.find <PopularProductController>().popularProductList[pageId];
-   // print("page is id "+pageId.toString());
-   // print("product name is "+product.name.toString());
+    Get.find<PopularProductController>().initProduct();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -90,7 +89,8 @@ final  int pageId;
           )), 
         ],
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar:GetBuilder<PopularProductController>(builder:(popularProduct){
+        return  Container(
         height:Dimensions.bottomHeightBar,
         padding: EdgeInsets.only(top: Dimensions.height30,bottom:Dimensions.height30,left: Dimensions.width20,right:Dimensions.width20),
         decoration: BoxDecoration(
@@ -112,11 +112,19 @@ final  int pageId;
               ),
               child: Row(
                 children: [
-                  Icon(Icons.remove,color: AppColors.signColor,),
+                   GestureDetector(
+                onTap: () {
+                  popularProduct.setQuantity(false);
+                },
+                child: Icon(Icons.remove, color:AppColors.signColor,)),
                   SizedBox(width: Dimensions.width10/2,),
-                  BigText(text: "0"),
+                  BigText(text: popularProduct.quantity.toString()),
                SizedBox(width: Dimensions.width10/2,),
-                  Icon(Icons.add, color:AppColors.signColor,),
+              GestureDetector(
+                onTap: () {
+                  popularProduct.setQuantity(true);
+                },
+                child: Icon(Icons.add, color:AppColors.signColor,)),
                 ]),
             ),
             Container(
@@ -129,7 +137,8 @@ final  int pageId;
             )
           ]
           ),
-      ),
+      );
+      },)
     );
     
   }
