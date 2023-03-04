@@ -1,3 +1,4 @@
+import 'package:ecommerce/controllers/cart_controller.dart';
 import 'package:ecommerce/controllers/popular_product_controller.dart';
 import 'package:ecommerce/pages/home/main_food_page.dart';
 import 'package:ecommerce/utils/app_constants.dart';
@@ -22,7 +23,7 @@ final  int pageId;
   @override
   Widget build(BuildContext context) {
     var product = Get.find <PopularProductController>().popularProductList[pageId];
-    Get.find<PopularProductController>().initProduct();
+    Get.find<PopularProductController>().initProduct(Get.find<CartController>());
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -129,7 +130,11 @@ final  int pageId;
             ),
             Container(
                  padding: EdgeInsets.only(top: Dimensions.height20,bottom:Dimensions.height20,left: Dimensions.width20,right:Dimensions.width20),
-              child: BigText(text:"\RS ${product.price!} | Add to cart",color: Colors.white,),
+              child: GestureDetector(
+                onTap: () {
+                  popularProduct.addItem(product);
+                },
+                child: BigText(text:"\RS ${product.price!} | Add to cart",color: Colors.white,)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Dimensions.radius20),
                 color: AppColors.mainColor

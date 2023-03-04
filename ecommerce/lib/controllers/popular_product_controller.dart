@@ -1,3 +1,4 @@
+import 'package:ecommerce/controllers/cart_controller.dart';
 import 'package:ecommerce/data/repository/poular_product_repo.dart';
 import 'package:ecommerce/models/products_model.dart';
 import 'package:flutter/material.dart';
@@ -10,21 +11,23 @@ class  PopularProductController extends GetxController{
 PopularProductController({required this.popularProductRepo});
 List<ProductModel> _popularProductList = [];
 List<ProductModel> get popularProductList => _popularProductList;
+late CartController _cart;
 
 bool _isLoaded =false;
 bool get isLoaded=> _isLoaded;
 
 int _quantity=0;
 int get quantity=>_quantity;
+int _inCartItems=0;
+int get inCartItems=>_inCartItems+_quantity;
+
+
 Future<void> getPopularProductList()async{
 Response response = await popularProductRepo.getPopularProductList();
 print(popularProductRepo.getPopularProductList());
 if(response.statusCode ==200){
-
-  print("got prodcuts");
 _popularProductList = [];
 _popularProductList.addAll(Product.fromJson(response.body).products);
-//print (_popularProductList);
 _isLoaded = true;
 update(); 
 }else{
@@ -59,8 +62,15 @@ int checkQuantity(int quantity){
     return  quantity;
   }
 }
-void initProduct(){
+void initProduct(CartController cart){
   _quantity=0;
+  _inCartItems=0;
+  _cart=cart;
+  // if exist
+  //get from storage _incartItems
+}
+void addItem(ProductModel product){
+_cart.addItem(product, _quantity);
 }
 
 }
