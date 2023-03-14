@@ -1,5 +1,6 @@
 import 'package:ecommerce/controllers/cart_controller.dart';
 import 'package:ecommerce/controllers/popular_product_controller.dart';
+import 'package:ecommerce/pages/cart/cart_page.dart';
 import 'package:ecommerce/pages/home/main_food_page.dart';
 import 'package:ecommerce/utils/app_constants.dart';
 import 'package:ecommerce/utils/dimensions.dart';
@@ -66,9 +67,22 @@ final  int pageId;
                       Get.find<PopularProductController>().totalItems>=1? 
                       Positioned(
                         right:0,top:0,
-                        child: AppIcon(icon:Icons.circle,size:20,
-                        iconColor: Colors.transparent,
-                        backgroundColor: AppColors.mainColor,),
+                        child: GestureDetector(
+                          onTap: (() {
+                            Get.to(() => CartPage());
+                          }),
+                          child: AppIcon(icon:Icons.circle,size:20,
+                          iconColor: Colors.transparent,
+                          backgroundColor: AppColors.mainColor,),
+                        ),
+                      ):
+                      Container(),
+                       Get.find<PopularProductController>().totalItems>=1? 
+                      Positioned(
+                        right:3,top:3,
+                        child: BigText(text: Get.find<PopularProductController>().totalItems.toString(),
+                        size: 12,color: Colors.white,
+                         ),
                       ):
                       Container()
                       ],
@@ -142,16 +156,18 @@ final  int pageId;
                 child: Icon(Icons.add, color:AppColors.signColor,)),
                 ]),
             ),
-            Container(
-                 padding: EdgeInsets.only(top: Dimensions.height20,bottom:Dimensions.height20,left: Dimensions.width20,right:Dimensions.width20),
-              child: GestureDetector(
-                onTap: () {
-                  popularProduct.addItem(product);
-                },
-                child: BigText(text:"\RS ${product.price!} | Add to cart",color: Colors.white,)),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Dimensions.radius20),
-                color: AppColors.mainColor
+            GestureDetector(
+              onTap: () {
+                popularProduct.addItem(product);
+              },
+              child: Container(
+                   padding: EdgeInsets.only(top: Dimensions.height20,bottom:Dimensions.height20,left: Dimensions.width20,right:Dimensions.width20),
+              
+                  child: BigText(text:"\RS ${product.price!} | Add to cart",color: Colors.white,),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Dimensions.radius20),
+                  color: AppColors.mainColor
+                ),
               ),
             )
           ]

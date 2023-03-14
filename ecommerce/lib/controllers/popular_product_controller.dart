@@ -1,5 +1,6 @@
 import 'package:ecommerce/controllers/cart_controller.dart';
 import 'package:ecommerce/data/repository/poular_product_repo.dart';
+import 'package:ecommerce/models/cart_model.dart';
 import 'package:ecommerce/models/products_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,18 +40,24 @@ void setQuantity(bool isIncrement){
   if(isIncrement){
    // print("increment"+_quantity.toString());
 _quantity =checkQuantity(_quantity+1);
+//print("number of items "+_quantity.toString());
   }else{
 _quantity =checkQuantity(_quantity-1);
-print("decrement "+_quantity.toString());
+//print("decrement "+_quantity.toString());
   }
   update();
 }
+
 int checkQuantity(int quantity){
   if((_inCartItems+quantity)<0){
     Get.snackbar("Item count", "You can't reduce more !",
     backgroundColor:AppColors.mainColor,
     colorText:Colors.white,
     );
+    if (_inCartItems>0){
+      _quantity = -_inCartItems;
+      return _quantity;
+    }
     return 0;
   } else if((_inCartItems +quantity) >20){
     Get.snackbar("Item count", "You can't add more !",
@@ -87,5 +94,8 @@ void addItem(ProductModel product){
 }
 int get totalItems{
   return _cart.totalItems;
+}
+List<CartModel> get getItems{
+  return _cart.getItems;
 }
 }
