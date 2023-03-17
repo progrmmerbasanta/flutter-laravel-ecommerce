@@ -26,6 +26,7 @@ _items.update(product.id!, (value) {
     quantity:value.quantity!+quantity,
     isExist:true,
     time:DateTime.now().toString(),
+    product: product,
 );
   });
 if(totalQuantity<=0){
@@ -43,6 +44,7 @@ _items.putIfAbsent(product.id!, () {
     quantity:quantity,
     isExist:true,
     time:DateTime.now().toString(),
+    product: product,
 );}
  );
   }else{
@@ -52,6 +54,7 @@ _items.putIfAbsent(product.id!, () {
     );
   }
 }
+update();
  }
 bool existInCart(ProductModel product){
   if(_items.containsKey(product.id)){
@@ -82,5 +85,13 @@ bool existInCart(ProductModel product){
 return _items.entries.map((e){
   return  e.value;
  }).toList();
+}
+int get totalAmount{
+  var total =0;
+  _items.forEach((key, value) {
+    total+= value.quantity!*value.price!;
+  });
+  return total;
+
 }
 }
