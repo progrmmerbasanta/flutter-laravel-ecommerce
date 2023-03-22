@@ -44,4 +44,7 @@ static double poularFoodImgSize = screenHeight/2.41;
 //bottom height
 static double bottomHeightBar = screenHeight/7.03;
 
+//splash screen 
+static double splashImg = screenHeight/3.38;
+
 }

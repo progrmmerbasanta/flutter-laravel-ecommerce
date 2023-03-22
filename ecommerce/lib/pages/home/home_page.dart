@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:ecommerce/colors.dart';
 import 'package:ecommerce/pages/home/main_food_page.dart';
@@ -17,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex=0;
-  late PersistentTabController _controller;
+late PersistentTabController _controller;
 
   List pages =[
 MainFoodPaage(),
@@ -70,6 +69,7 @@ Container(child: Center(child: Text("Next next next page"))),
                 title: ("Me"),
                 activeColorPrimary: CupertinoColors.activeBlue,
                 inactiveColorPrimary: CupertinoColors.systemGrey,
+                
             ),
         ];
     }
