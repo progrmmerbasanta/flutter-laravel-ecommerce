@@ -77,11 +77,11 @@ void initProduct(ProductModel product,CartController cart){
   exist = _cart.existInCart(product);
   // if exist
   //get from storage _incartItems
-  print("exist or not "+exist.toString());
+ // print("exist or not "+exist.toString());
   if (exist){
     _inCartItems=_cart.getQuantity(product);
   }
-  print("the quantity in the cart is "+_inCartItems.toString());
+  //print("the quantity in the cart is "+_inCartItems.toString());
 }
 void addItem(ProductModel product){
     _cart.addItem(product, _quantity);

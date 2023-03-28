@@ -2,6 +2,7 @@ import 'package:ecommerce/data/repository/cart_repo.dart';
 import 'package:ecommerce/models/products_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../colors.dart';
 import '../models/cart_model.dart';
@@ -11,6 +12,8 @@ class CartController extends GetxController{
  CartController({required this.cartRepo});
  Map<int, CartModel> _items={};
  Map <int,CartModel>get items=>_items;
+ //only for storage and SharedPreferences
+ List<CartModel> storageItems=[];
  void addItem(ProductModel product, int quantity){
   var totalQuantity=0;
   if(_items.containsKey(product.id!)){
@@ -54,6 +57,7 @@ _items.putIfAbsent(product.id!, () {
     );
   }
 }
+cartRepo.addToCartList(getItems);
 update();
  }
 bool existInCart(ProductModel product){
@@ -92,6 +96,24 @@ int get totalAmount{
     total+= value.quantity!*value.price!;
   });
   return total;
-
+}
+List<CartModel> getCartData(){
+  setCart = cartRepo.getCartList();
+  return storageItems;
+}
+set setCart(List<CartModel> items){
+  storageItems=items;
+  //print("Length of cart items " +storageItems.length.toString());
+for(int i=0;i<storageItems.length;i++){
+  _items.putIfAbsent(storageItems[i].product!.id!, () => storageItems[i]);
+}
+}
+void addToHistory(){
+  cartRepo.addToCartHistoryList();
+  clear();
+}
+void  clear (){
+  _items = {};
+  update();
 }
 }
