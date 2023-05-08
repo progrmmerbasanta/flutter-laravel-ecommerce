@@ -1,5 +1,6 @@
 
 import 'package:ecommerce/colors.dart';
+import 'package:ecommerce/pages/cart/cart_history.dart';
 import 'package:ecommerce/pages/home/main_food_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,9 @@ class _HomePageState extends State<HomePage> {
 late PersistentTabController _controller;
 
   List pages =[
-MainFoodPaage(),
+//MainFoodPaage(),
 Container(child: Center(child: Text("Next page"))),
-Container(child: Center(child: Text("Next next page"))),
+CartHistory(),
 Container(child: Center(child: Text("Next next next page"))),
 
   ];
@@ -40,7 +41,7 @@ List<Widget> _buildScreens() {
         return [
  MainFoodPaage(),
 Container(child: Center(child: Text("Next page"))),
-Container(child: Center(child: Text("Next next page"))),
+CartHistory(),
 Container(child: Center(child: Text("Next next next page"))),
         ];
     }
