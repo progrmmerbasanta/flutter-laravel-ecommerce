@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ecommerce/base/no_data_page.dart';
 import 'package:ecommerce/colors.dart';
 import 'package:ecommerce/controllers/cart_controller.dart';
 import 'package:ecommerce/models/cart_model.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../routes/route_helper.dart';
 
 class CartHistory extends StatelessWidget {
   const CartHistory({Key? key}) : super(key: key);
@@ -38,6 +41,16 @@ class CartHistory extends StatelessWidget {
   List<int> itemsPerOrder = cartItemsPerOrderToList();
   
   var ListCounter=0;
+  Widget timeWidget(int index){
+    var outputDate = DateTime.now().toString();
+ if(index<getCartHistoryList.length){
+  DateTime parseDate=  DateFormat("yyyy-MM-dd HH:mm:ss").parse(getCartHistoryList[ListCounter].time!);
+    var inputDate= DateTime.parse(parseDate.toString());
+   var outputFormat= DateFormat("MM/dd/yyyy hh:mm a");
+     outputDate = outputFormat.format(inputDate);
+ }
+    return BigText(text:outputDate);       
+  }
     return Scaffold(
       body:Column(
         children: [
@@ -57,9 +70,8 @@ mainAxisAlignment: MainAxisAlignment.spaceAround,
           ],
         ),
        ),
-      Expanded(child: 
-      Container(
-      
+      GetBuilder<CartController>(builder:(_cartController){
+ return _cartController.getCartHistoryList().length>0?Expanded(child:Container(
         margin: EdgeInsets.only(
           top: Dimensions.height20,
           left: Dimensions.width20,
@@ -76,13 +88,7 @@ mainAxisAlignment: MainAxisAlignment.spaceAround,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ((){
-  DateTime parseDate=  DateFormat("yyyy-MM-dd HH:mm:ss").parse(getCartHistoryList[ListCounter].time!);
-            var inputDate= DateTime.parse(parseDate.toString());
-            var outputFormat= DateFormat("MM/dd/yyyy hh:mm a");
-           var outputDate = outputFormat.format(inputDate);
-             return BigText(text:outputDate);
-              }()),
+             timeWidget(ListCounter),
               SizedBox(height: Dimensions.height10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,6 +128,7 @@ mainAxisAlignment: MainAxisAlignment.spaceAround,
                     }  
         Get.find<CartController>().setItems = moreOrder;    
         Get.find<CartController>().addToCartList();
+        Get.toNamed(RouteHelper.getCartPage());
                      },
                   child: Container(
                 height: Dimensions.height20*4,
@@ -151,7 +158,14 @@ mainAxisAlignment: MainAxisAlignment.spaceAround,
         )
           ],
         ),) 
-       ))
+       )):
+       SizedBox(
+        height:MediaQuery.of(context).size.height/1.5,
+        child: Center(
+          child:const NoDataPage(text: "You didn't buy anything so far!",
+       imgPath: "assets/image/empty_box.png",),
+       ));
+  })
         ],
       )
     );

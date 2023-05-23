@@ -1,3 +1,4 @@
+import 'package:ecommerce/base/no_data_page.dart';
 import 'package:ecommerce/colors.dart';
 import 'package:ecommerce/controllers/cart_controller.dart';
 import 'package:ecommerce/controllers/popular_product_controller.dart';
@@ -54,7 +55,8 @@ class CartPage extends StatelessWidget {
                   )
                 ],
             )),
-            Positioned(
+     GetBuilder<CartController>(builder:(_cartController){
+      return _cartController.getItems.length>0?Positioned(
               top:Dimensions.height20*5,
               left:Dimensions.width20,
               right: Dimensions.width20,
@@ -86,7 +88,14 @@ class CartPage extends StatelessWidget {
                                var recommendedIndex = Get.find<RecommendedProductController>()
                             .recommendedProductList
                             .indexOf(_cartList[index].product!);
-                            Get.toNamed(RouteHelper.getRecommendedFood(recommendedIndex,"cartpage"));
+               if(recommendedIndex<0){
+           Get.snackbar("History product", "Product review is not available for history products",
+          backgroundColor:AppColors.mainColor,
+           colorText:Colors.white,
+    );
+               }else{
+              Get.toNamed(RouteHelper.getRecommendedFood(recommendedIndex,"cartpage"));
+               }
                             }
                               },
                               child:Container(
@@ -155,7 +164,8 @@ class CartPage extends StatelessWidget {
                   });
                   },),
                 ),
-              ))
+              )):NoDataPage(text: "Your cart is empty!");
+     })
         ],
       ),
       bottomNavigationBar:GetBuilder<CartController>(builder:(CartController){
@@ -170,7 +180,7 @@ class CartPage extends StatelessWidget {
             topRight: Radius.circular(Dimensions.radius20*2)
           )
         ),
-        child: Row(
+        child:CartController.getItems.length>0?Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
@@ -204,7 +214,7 @@ class CartPage extends StatelessWidget {
               ),
             )
           ]
-          ),
+          ):Container(),
       );
       },)
     );
