@@ -5,8 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../colors.dart';
+import '../../controllers/popular_product_controller.dart';
+import '../../controllers/recommended_product_controller.dart';
 import 'food_page_body.dart';
 
 class MainFoodPaage extends StatefulWidget {
@@ -17,10 +21,13 @@ class MainFoodPaage extends StatefulWidget {
 }
 
 class _MainFoodPaageState extends State<MainFoodPaage> {
+  Future<void> _loadResource() async{
+    await Get.find<PopularProductController>().getPopularProductList();
+    await Get.find<RecommendedProductController>().getRecommendedProductList();
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return RefreshIndicator(child: Column(
         children:[
         Container(
           child : Container(
@@ -59,7 +66,6 @@ mainAxisAlignment: MainAxisAlignment.spaceBetween,
         child: FoodPageBody(),
        )),
     ],
-    )
-    ) ;
+    ), onRefresh:_loadResource);
   }
 }

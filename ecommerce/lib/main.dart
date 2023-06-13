@@ -1,6 +1,8 @@
 import 'package:ecommerce/controllers/cart_controller.dart';
 import 'package:ecommerce/controllers/popular_product_controller.dart';
 import 'package:ecommerce/models/products_model.dart';
+import 'package:ecommerce/pages/auth/sign_in_page.dart';
+import 'package:ecommerce/pages/auth/sign_up_page.dart';
 import 'package:ecommerce/pages/cart/cart_page.dart';
 import 'package:ecommerce/pages/food/recommended_food_detail.dart';
 import 'package:ecommerce/pages/home/food_page_body.dart';
@@ -30,9 +32,10 @@ return GetBuilder<RecommendedProductController>(builder:(_){
 return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      home: SignInpage(),
       //home:SplashScreen(),
-     initialRoute: RouteHelper.getSplashPage(),
-      getPages: RouteHelper.routes,
+   //  initialRoute: RouteHelper.getSplashPage(),
+      //getPages: RouteHelper.routes,
     );
 });
     });

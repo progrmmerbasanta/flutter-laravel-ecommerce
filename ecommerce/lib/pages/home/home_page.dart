@@ -1,5 +1,7 @@
 
 import 'package:ecommerce/colors.dart';
+import 'package:ecommerce/pages/account/account_page.dart';
+import 'package:ecommerce/pages/auth/sign_up_page.dart';
 import 'package:ecommerce/pages/cart/cart_history.dart';
 import 'package:ecommerce/pages/home/main_food_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,8 +25,7 @@ late PersistentTabController _controller;
 //MainFoodPaage(),
 Container(child: Center(child: Text("Next page"))),
 CartHistory(),
-Container(child: Center(child: Text("Next next next page"))),
-
+//AccountPage(),
   ];
   void onTapNav(int index){
     setState(() {
@@ -40,9 +41,9 @@ _controller = PersistentTabController(initialIndex: 0);
 List<Widget> _buildScreens() {
         return [
  MainFoodPaage(),
-Container(child: Center(child: Text("Next page"))),
+SignUpPage(),
 CartHistory(),
-Container(child: Center(child: Text("Next next next page"))),
+AccountPage(),
         ];
     }
     List<PersistentBottomNavBarItem> _navBarsItems() {
