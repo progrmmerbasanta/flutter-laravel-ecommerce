@@ -1,7 +1,9 @@
 //import 'dart:html';
 import 'dart:io';
+import 'package:ecommerce/base/custom_loader.dart';
 import 'package:ecommerce/colors.dart';
 import 'package:ecommerce/pages/auth/sign_up_page.dart';
+import 'package:ecommerce/routes/route_helper.dart';
 import 'package:ecommerce/widgets/app_text_field.dart';
 import 'package:ecommerce/widgets/big_text.dart';
 import 'package:flutter/gestures.dart';
@@ -10,6 +12,8 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import '../../base/show_custom_snackbar.dart';
+import '../../controllers/auth_controller.dart';
 import '../../utils/dimensions.dart';
 class SignInpage extends StatelessWidget {
   const SignInpage({Key? key}) : super(key: key);
@@ -18,11 +22,33 @@ class SignInpage extends StatelessWidget {
   Widget build(BuildContext context) {
     var emailController = TextEditingController();
      var passwordController = TextEditingController();
-     var nameController = TextEditingController();
-    var phoneController = TextEditingController();
+     void _login(AuthController authController){
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
+     if(email.isEmpty){
+ showCustomSnackBar("Type in your email address",title: "Email address");
+      }else if(!GetUtils.isEmail(email)){
+ showCustomSnackBar("Type in a valid email address",title: "Valid email address");
+      }else if(password.isEmpty){
+ showCustomSnackBar("Type in your password",title: "Password");
+      }else if(password.length<6){
+ showCustomSnackBar("Password can not be less than six characters",title: "password");
+      }else{
+   authController.login(email,password).then((status){
+if(status.isSuccess){
+  //print("Success registaration");
+  Get.toNamed(RouteHelper.getInitial());
+}else{
+  showCustomSnackBar(status.message);
+}
+   });
+
+      }
+    }
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+      body: GetBuilder<AuthController>(builder: (authController){
+        return !authController.isLoading ?SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
           children: [
@@ -66,15 +92,15 @@ class SignInpage extends StatelessWidget {
             ),
             SizedBox(height: Dimensions.height20,),
             //phone
-              AppTextField(textController: phoneController, 
+              AppTextField(textController: emailController, 
             hintText: "Email", 
             icon: Icons.email
             ),
             SizedBox(height: Dimensions.height20),
             //password
-            AppTextField(textController: phoneController, 
+            AppTextField(textController: passwordController, 
             hintText: "Password", 
-            icon: Icons.password_sharp
+            icon: Icons.password_sharp,isObscure: true,
             ),
             SizedBox(height: Dimensions.height20),
             //tag line
@@ -95,20 +121,25 @@ class SignInpage extends StatelessWidget {
              ),
              SizedBox(height: Dimensions.screenHeight*0.05,),
             // sign up
-            Container(
-              width: Dimensions.screenWidth/2,
-              height: Dimensions.screenHeight/13,
-            decoration  :BoxDecoration(
-             borderRadius: BorderRadius.circular(Dimensions.radius30),
-             color: AppColors.mainColor
-            ),
-        child: Center(
-          child: BigText(
-            text:"Sign In",
-            size: Dimensions.font20+Dimensions.font20+2,
-            color: Colors.white,
-            ),
-        )
+            GestureDetector(
+              onTap: () {
+                _login(authController);
+              },
+              child: Container(
+                width: Dimensions.screenWidth/2,
+                height: Dimensions.screenHeight/13,
+              decoration  :BoxDecoration(
+               borderRadius: BorderRadius.circular(Dimensions.radius30),
+               color: AppColors.mainColor
+              ),
+                    child: Center(
+                      child: BigText(
+              text:"Sign In",
+              size: Dimensions.font20+Dimensions.font20+2,
+              color: Colors.white,
+              ),
+                    )
+              ),
             ),
             SizedBox(height: Dimensions.screenHeight*0.05,),
                 //sign up optins
@@ -135,7 +166,8 @@ class SignInpage extends StatelessWidget {
                 ),
           ],
         ),
-      ),
+      ):CustomLoader();
+      })
     );
   }
 }

@@ -1,6 +1,7 @@
 
 import 'package:ecommerce/colors.dart';
 import 'package:ecommerce/pages/account/account_page.dart';
+import 'package:ecommerce/pages/auth/sign_in_page.dart';
 import 'package:ecommerce/pages/auth/sign_up_page.dart';
 import 'package:ecommerce/pages/cart/cart_history.dart';
 import 'package:ecommerce/pages/home/main_food_page.dart';
@@ -41,7 +42,7 @@ _controller = PersistentTabController(initialIndex: 0);
 List<Widget> _buildScreens() {
         return [
  MainFoodPaage(),
-SignUpPage(),
+Container(child: Text("history page"),),
 CartHistory(),
 AccountPage(),
         ];

@@ -1,7 +1,10 @@
 //import 'dart:html';
 import 'dart:io';
+import 'package:ecommerce/base/custom_loader.dart';
 import 'package:ecommerce/base/show_custom_snackbar.dart';
 import 'package:ecommerce/colors.dart';
+import 'package:ecommerce/controllers/auth_controller.dart';
+import 'package:ecommerce/models/signup_body_model.dart';
 import 'package:ecommerce/widgets/app_text_field.dart';
 import 'package:ecommerce/widgets/big_text.dart';
 import 'package:flutter/gestures.dart';
@@ -10,6 +13,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import '../../routes/route_helper.dart';
 import '../../utils/dimensions.dart';
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -25,7 +29,7 @@ class SignUpPage extends StatelessWidget {
       "f.png",
       "g.png"
     ];
-     void _registration(){
+     void _registration(AuthController authController){
       String name = nameController.text.trim();
       String phone = phoneController.text.trim();
       String email = emailController.text.trim();
@@ -44,13 +48,26 @@ class SignUpPage extends StatelessWidget {
  showCustomSnackBar("Password can not be less than six characters",title: "password");
 
       }else{
- showCustomSnackBar("All went well",title: "Perfect");
+
+ SignUpBody signUpBody =SignUpBody(name: name,
+  phone: phone,
+   email: email, 
+   password: password);
+   authController.registration(signUpBody).then((status){
+if(status.isSuccess){
+  print("Success registaration");
+  Get.offNamed(RouteHelper.getInitial());
+}else{
+  showCustomSnackBar(status.message);
+}
+   });
 
       }
     }
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+      body: GetBuilder<AuthController>(builder:(_authController){
+        return ! _authController.isLoading? SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
           children: [
@@ -79,7 +96,7 @@ class SignUpPage extends StatelessWidget {
             //your password
               AppTextField(textController: passwordController, 
             hintText: "Password", 
-            icon: Icons.password_sharp
+            icon: Icons.password_sharp,isObscure:true,
             ),
             SizedBox( height: Dimensions.height20),
             //your Name
@@ -97,7 +114,7 @@ class SignUpPage extends StatelessWidget {
             // sign up
             GestureDetector(
               onTap: () {
-              _registration();
+              _registration(_authController);
               },
               child: Container(
                 width: Dimensions.screenWidth/2,
@@ -153,7 +170,8 @@ class SignUpPage extends StatelessWidget {
                 )
           ],
         ),
-      ),
+      ):const CustomLoader();
+      })
     );
   }
 }
